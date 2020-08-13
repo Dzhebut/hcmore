@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -24,7 +25,8 @@ public class ConfigUtils {
     public static void readConfiguration() {
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream("config.properties"));
+            InputStream in = ConfigUtils.class.getClassLoader().getResourceAsStream("config.properties");
+            properties.load(in);
         } catch (IOException e) {
             e.printStackTrace();
             logger.info(e.getMessage());

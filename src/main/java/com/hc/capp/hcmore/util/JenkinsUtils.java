@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import static com.hc.capp.hcmore.util.ConfigUtils.jenkinsJobName;
+import static com.hc.capp.hcmore.util.ConfigUtils.readConfiguration;
 
 public class JenkinsUtils {
 
@@ -80,6 +81,7 @@ public class JenkinsUtils {
      * @return result of latest build
      */
     public static void triggerJenkinsJob() {
+        System.out.println(ConfigUtils.deployURL);
         try {
             JenkinsServer jenkinsServer =
                     new JenkinsServer(
@@ -100,14 +102,22 @@ public class JenkinsUtils {
             System.out.println("building this job...");
             Thread.sleep(10000);
             String logPath = String.format("/job/%s/%d/logText/progressiveText",ConfigUtils.jenkinsJobName,nextNum);
+            System.out.println(logPath);
            // String logPath = String.format("C:\\Program Files (x86)\\Jenkins\\jobs\\%s\\builds\\%d\\log", ConfigUtils.jenkinsJobName, nextNum);
             int beginIndex = 0;
             System.out.println("nextNum is: " + nextNum);
             while (!isFinished(nextNum, jenkinsJobName, jenkinsServer)){
-                Thread.sleep(3000);
-                String s = jenkinsHttpClient.get(logPath);
-                System.out.print(s.substring(beginIndex));
-                beginIndex = s.length();
+//                Thread.sleep(10000);
+                try {
+                    String s = jenkinsHttpClient.get(logPath);
+                    System.out.print(s.substring(beginIndex));
+                    beginIndex = s.length();
+                }catch (IOException  e) {
+                    e.printStackTrace();
+                    Thread.sleep(10000);
+                    continue;
+                }
+
                 /*
                 Scanner scanner = new Scanner(new File(logPath));
                 while (scanner.hasNextLine()){

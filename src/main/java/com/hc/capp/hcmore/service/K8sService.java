@@ -9,7 +9,9 @@ public class K8sService implements CommonService{
     @Override
     public void execute() {
         System.out.println("K8sService::execute");
+        shutdown();
         deploy();
+        startup();
     }
 
     @Override
