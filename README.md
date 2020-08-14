@@ -1,2 +1,0 @@
-# hcmore
-joey
